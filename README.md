@@ -945,34 +945,34 @@ Comparison of four inference configurations on 100 real-machine macOS GUI tasks 
 
 | Metric            | Cloud | Cloud+Bash | Local (Mano-P 4B) | Qwen3-VL-Plus |
 | ----------------- | :---: | :--------: | :---------------: | :-----------: |
-| Pass rate         | 83.0% |   90.0%    |       47.0%       |     39.0%     |
-| Avg steps / task  | 10.3  |     —      |        7.5        |     11.2      |
-| Avg time per step | 9.3s  |     —      |       8.0s        |     10.2s     |
+| Pass rate         | 83.0% |   90.0%    |       56.0%       |     39.0%     |
+| Avg steps / task  | 10.3  |     —      |       11.5        |     11.2      |
+| Avg time per step | 9.3s  |     —      |       7.9s        |     10.2s     |
 
 **Difficulty Tiers**
 
 | Tier | Tasks |    Cloud    |    Local    | Qwen3-VL-Plus |
 | ---- | :---: | :---------: | :---------: | :-----------: |
-| A    |  25   | 23/25 (92%) | 21/25 (84%) |  18/25 (72%)  |
-| B    |  45   | 37/45 (82%) | 18/45 (40%) |  14/45 (31%)  |
-| C    |  30   | 23/30 (77%) | 7/30 (23%)  |  7/30 (23%)   |
+| A    |  25   | 23/25 (92%) | 22/25 (88%) |  18/25 (72%)  |
+| B    |  45   | 37/45 (82%) | 24/45 (53%) |  14/45 (31%)  |
+| C    |  30   | 23/30 (77%) | 10/30 (33%) |  7/30 (23%)   |
 
 **Per Category**
 
 | Category                      |  Cloud   |  Local   | Qwen3-VL-Plus |
 | ----------------------------- | :------: | :------: | :-----------: |
-| Browser / Web (31)            | 28 (90%) | 23 (74%) |   18 (58%)    |
+| Browser / Web (31)            | 28 (90%) | 21 (68%) |   18 (58%)    |
 | Fuzzy descriptions (10)       | 8 (80%)  | 3 (30%)  |    3 (30%)    |
 | File management (7)           | 5 (71%)  | 3 (43%)  |    4 (57%)    |
-| WeChat (6)                    | 5 (83%)  | 2 (33%)  |    2 (33%)    |
-| WeCom / Feishu / DingTalk (6) | 6 (100%) | 2 (33%)  |    3 (50%)    |
-| System settings (6)           | 3 (50%)  | 3 (50%)  |    3 (50%)    |
-| WPS / Office (5)              | 5 (100%) |  0 (0%)  |    0 (0%)     |
-| No open hint (5)              | 4 (80%)  | 1 (20%)  |    2 (40%)    |
+| WeChat (6)                    | 5 (83%)  | 4 (67%)  |    2 (33%)    |
+| WeCom / Feishu / DingTalk (6) | 6 (100%) | 5 (83%)  |    3 (50%)    |
+| System settings (6)           | 3 (50%)  | 5 (83%)  |    3 (50%)    |
+| WPS / Office (5)              | 5 (100%) | 2 (40%)  |    0 (0%)     |
+| No open hint (5)              | 4 (80%)  | 3 (60%)  |    2 (40%)    |
 | Notes / Reminders (4)         | 4 (100%) | 2 (50%)  |    0 (0%)     |
 | System utilities (3)          | 3 (100%) | 3 (100%) |    1 (33%)    |
-| Long chains (10)              | 8 (80%)  | 2 (20%)  |    2 (20%)    |
-| Cross-app (5)                 | 3 (60%)  |  0 (0%)  |    0 (0%)     |
+| Long chains (10)              | 8 (80%)  | 3 (30%)  |    2 (20%)    |
+| Cross-app (5)                 | 3 (60%)  | 1 (20%)  |    0 (0%)     |
 
 **Cloud + Bash Tool**
 
@@ -991,15 +991,14 @@ Cloud+Bash pass rate: **90/100 = 90%** (+7; 2 of those were false negatives caus
 
 **Why Local Matters**
 
-- ✅ **Fewer steps**: Local averages 7.5 steps vs Cloud 10.3 vs Qwen 11.2 — GUI-specialized fine-tuning makes actions more direct
-- ✅ **Faster per step**: 8.0s vs Cloud 9.3s vs Qwen 10.2s
+- ✅ **Faster per step**: 7.9s vs Cloud 9.3s vs Qwen 10.2s
 - ✅ **Fully local**: zero outbound traffic for screenshots or task descriptions, no network dependency
 - ✅ **Lightweight deployment**: ~6.4 GB memory footprint, runs on a MacBook
-- ✅ **Small model beats large model**: Mano-P 4B (47%) outperforms the cloud-based general-purpose VL model Qwen3-VL-Plus (39%) as a fully local 4B model, demonstrating the value of GUI-specialized fine-tuning
+- ✅ **Small model beats large model**: Mano-P 4B (56%) significantly outperforms the cloud-based general-purpose VL model Qwen3-VL-Plus (39%) as a fully local 4B model, demonstrating the value of GUI-specialized fine-tuning
 
 **Current Gap**
 
-The 4B on-device model reaches 47% vs Cloud's 83%. The gap concentrates in fuzzy descriptions, cross-app workflows, and deep office-suite operations — these are the explicit directions for the next iteration. Qwen3-VL-Plus, as a cloud-based general-purpose VL model, only reaches 39%, primarily limited by Chinese input focus issues, poor adaptation to non-browser apps, and step-limit truncation — showing that general VL capability does not equal GUI Agent capability. Cloud+Bash mode pushes the pass rate to **90%** via `osascript` / `sips` / `defaults write`, demonstrating the ceiling of a hybrid GUI + Shell strategy.
+The 4B on-device model reaches 56% vs Cloud's 83%. The gap concentrates in fuzzy descriptions, cross-app workflows, and deep office-suite operations — these are the explicit directions for the next iteration. Qwen3-VL-Plus, as a cloud-based general-purpose VL model, only reaches 39%, primarily limited by Chinese input focus issues, poor adaptation to non-browser apps, and step-limit truncation — showing that general VL capability does not equal GUI Agent capability. Cloud+Bash mode pushes the pass rate to **90%** via `osascript` / `sips` / `defaults write`, demonstrating the ceiling of a hybrid GUI + Shell strategy.
 
 **Test Configuration**
 
